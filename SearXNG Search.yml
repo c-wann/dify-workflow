@@ -1,0 +1,569 @@
+app:
+  description: Searching from the Internet
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: SearXNG Search
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/azure_openai:0.0.3@e12f2cbb2e1077762e4c6ddd3a7d78cf0c4caa973f01e80693f9a99c61f74a83
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/searxng:0.0.2@cb5502d22b7d12f0cfc52280269a0594ff2ea4ac4d55e1d6c2620ea04f42a5f5
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1739180347454-source-1739180468964-target
+      source: '1739180347454'
+      sourceHandle: source
+      target: '1739180468964'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1739180183762-source-1739180209760-target
+      source: '1739180183762'
+      sourceHandle: source
+      target: '1739180209760'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 1739180209760-source-1741781948054-target
+      source: '1739180209760'
+      sourceHandle: source
+      target: '1741781948054'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: llm
+      id: 1741781948054-source-1739180347454-target
+      source: '1741781948054'
+      sourceHandle: source
+      target: '1739180347454'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: question
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: Question
+      height: 90
+      id: '1739180183762'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1739180183762'
+          - Question
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/azure_openai/azure_openai
+        prompt_template:
+        - id: 6e4e73ec-4510-427e-8aaa-e1e4684e3389
+          role: system
+          text: '```xml
+
+            <instructions>
+
+            The task is to generate keywords for searching the web based on the given
+            question. Follow these step-by-step directions to complete the task:
+
+
+            1. Carefully analyze the question provided. Identify the main topic, subtopics,
+            and any specific details or context that could help refine the search.
+
+
+            2. Extract the most relevant terms and phrases from the question. Focus
+            on nouns, verbs, and adjectives that are central to the meaning of the
+            question.
+
+
+            3. Consider synonyms, related terms, and variations of the extracted keywords
+            to broaden the scope of the search.
+
+
+            4. Avoid including unnecessary words, filler phrases, or overly generic
+            terms that may dilute the effectiveness of the search.
+
+
+            5. Ensure the keywords are concise, specific, and directly related to
+            the question. Aim for a balance between specificity and breadth to maximize
+            search relevance.
+
+
+            6. Provide only the keywords as the output. Do not include any additional
+            text, explanations, or formatting such as XML tags in the output.
+
+
+            7. Double-check the keywords to ensure they align with the intent of the
+            question and are optimized for web search.
+
+
+            </instructions>
+
+
+            <examples>
+
+            <example>
+
+            Input: "What are the best practices for remote team collaboration?"
+
+            Output: best practices, remote team collaboration, virtual teamwork, online
+            communication tools, remote work strategies
+
+            </example>
+
+
+            <example>
+
+            Input: "How can I learn Python programming for data analysis?"
+
+            Output: learn Python, Python programming, data analysis, Python tutorials,
+            Python for beginners, data science tools
+
+            </example>
+
+
+            <example>
+
+            Input: "What are the health benefits of drinking green tea?"
+
+            Output: health benefits, green tea, antioxidants, green tea nutrition,
+            green tea effects, herbal tea benefits
+
+            </example>
+
+            </examples>
+
+
+            Question: {{#1739180183762.Question#}}
+
+            ```'
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1739180209760'
+      position:
+        x: 440.72576587719516
+        y: 282
+      positionAbsolute:
+        x: 440.72576587719516
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1741781948054'
+          - json
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: langgenius/azure_openai/azure_openai
+        prompt_template:
+        - id: 32b9e54e-6ec9-4afd-8346-1c8f5eb20c2b
+          role: system
+          text: '```xml
+
+            <instructions>
+
+            You are an AI assistant tasked with answering user questions based on
+            Bing search results. Follow these steps to complete the task:
+
+
+            1. **Understand the Question**: Carefully read and comprehend the user''s
+            question. Identify the key information or topic they are asking about.
+
+
+            2. **Perform a Bing Search**: Use Bing search to find relevant and reliable
+            information that directly addresses the user''s question. Focus on authoritative
+            and up-to-date sources.
+
+
+            3. **Extract Relevant Information**: From the search results, extract
+            concise and accurate information that answers the user''s question. Avoid
+            including unnecessary details or unrelated content.
+
+
+            4. **Synthesize the Answer**: Combine the extracted information into a
+            clear, coherent, and well-structured response. Ensure the answer is easy
+            to understand and directly addresses the user''s query.
+
+
+            5. **Avoid XML Tags in Output**: Ensure that the final output does not
+            contain any XML tags or formatting. The response should be in plain text.
+
+
+            6. **Cite Sources When Necessary**: If the question requires factual or
+            specific information, briefly mention the source or provide a general
+            reference to the type of source (e.g., "According to a recent article"
+            or "Based on information from a trusted website").
+
+
+            7. **Maintain Neutrality and Accuracy**: Provide unbiased and accurate
+            information. Do not include personal opinions or speculative content.
+
+
+            8. **Be Concise and Relevant**: Keep the response focused on the question.
+            Avoid adding extraneous information or overly lengthy explanations.
+
+
+            9. **Review the Answer**: Before finalizing the response, ensure it is
+            free of errors, directly answers the question, and adheres to the above
+            guidelines.
+
+
+            The question: {{#1739180183762.Question#}}
+
+            Search result: {{#context#}}
+
+
+            </instructions>
+
+
+            <examples>
+
+            <example>
+
+            <input>
+
+            What is the capital of France?
+
+            </input>
+
+            <output>
+
+            The capital of France is Paris.
+
+            </output>
+
+            </example>
+
+
+            <example>
+
+            <input>
+
+            Who won the FIFA World Cup in 2018?
+
+            </input>
+
+            <output>
+
+            The FIFA World Cup in 2018 was won by France.
+
+            </output>
+
+            </example>
+
+
+            <example>
+
+            <input>
+
+            What are the health benefits of green tea?
+
+            </input>
+
+            <output>
+
+            Green tea is known for its health benefits, including improving brain
+            function, aiding in weight loss, reducing the risk of heart disease, and
+            providing antioxidants that may help prevent certain types of cancer.
+
+            </output>
+
+            </example>
+
+            </examples>
+
+            ```'
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '1739180347454'
+      position:
+        x: 1151.0685073351194
+        y: 282
+      positionAbsolute:
+        x: 1151.0685073351194
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1739180347454'
+          - text
+          variable: Answer
+        selected: false
+        title: End
+        type: end
+      height: 90
+      id: '1739180468964'
+      position:
+        x: 1514.7174782017682
+        y: 282
+      positionAbsolute:
+        x: 1514.7174782017682
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema: null
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Enter your search query
+            ja_JP: Enter your search query
+            pt_BR: Enter your search query
+            zh_Hans: 输入搜索关键词
+          label:
+            en_US: Query string
+            ja_JP: Query string
+            pt_BR: Query string
+            zh_Hans: 查询语句
+          llm_description: Key words for searching
+          max: null
+          min: null
+          name: query
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: general
+          form: form
+          human_description:
+            en_US: Search the web using SearXNG, a privacy-respecting metasearch engine
+            ja_JP: Search the web using SearXNG, a privacy-respecting metasearch engine
+            pt_BR: Search the web using SearXNG, a privacy-respecting metasearch engine
+            zh_Hans: 使用注重隐私的元搜索引擎 SearXNG 搜索网页
+          label:
+            en_US: search type
+            ja_JP: search type
+            pt_BR: search type
+            zh_Hans: 搜索类型
+          llm_description: ''
+          max: null
+          min: null
+          name: search_type
+          options:
+          - label:
+              en_US: General
+              ja_JP: General
+              pt_BR: General
+              zh_Hans: 综合
+            value: general
+          - label:
+              en_US: Images
+              ja_JP: Images
+              pt_BR: Images
+              zh_Hans: 图片
+            value: images
+          - label:
+              en_US: Videos
+              ja_JP: Videos
+              pt_BR: Videos
+              zh_Hans: 视频
+            value: videos
+          - label:
+              en_US: News
+              ja_JP: News
+              pt_BR: News
+              zh_Hans: 新闻
+            value: news
+          - label:
+              en_US: Map
+              ja_JP: Map
+              pt_BR: Map
+              zh_Hans: 地图
+            value: map
+          - label:
+              en_US: Music
+              ja_JP: Music
+              pt_BR: Music
+              zh_Hans: 音乐
+            value: music
+          - label:
+              en_US: It
+              ja_JP: It
+              pt_BR: It
+              zh_Hans: 信息技术
+            value: it
+          - label:
+              en_US: Science
+              ja_JP: Science
+              pt_BR: Science
+              zh_Hans: 科学
+            value: science
+          - label:
+              en_US: Files
+              ja_JP: Files
+              pt_BR: Files
+              zh_Hans: 文件
+            value: files
+          - label:
+              en_US: Social Media
+              ja_JP: Social Media
+              pt_BR: Social Media
+              zh_Hans: 社交媒体
+            value: social_media
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: select
+        params:
+          query: ''
+          search_type: ''
+        provider_id: langgenius/searxng/searxng
+        provider_name: langgenius/searxng/searxng
+        provider_type: builtin
+        selected: false
+        title: SearXNG Search
+        tool_configurations:
+          search_type: general
+        tool_label: SearXNG Search
+        tool_name: searxng_search
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1739180209760.text#}}'
+        type: tool
+      height: 90
+      id: '1741781948054'
+      position:
+        x: 801.4515317543903
+        y: 282
+      positionAbsolute:
+        x: 801.4515317543903
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 142.88569196605204
+      y: 136.9315129791447
+      zoom: 0.6210729809506246

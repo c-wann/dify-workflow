@@ -1,0 +1,129 @@
+app:
+  description: Demo Chatbot with Text2SQL
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: agent-chat
+  name: Query AI Chatbot
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/azure_openai:0.0.3@e12f2cbb2e1077762e4c6ddd3a7d78cf0c4caa973f01e80693f9a99c61f74a83
+kind: app
+model_config:
+  agent_mode:
+    enabled: true
+    max_iteration: 5
+    prompt: null
+    strategy: function_call
+    tools:
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: 4b80fd54-0b0d-49de-a76f-7d900acf9ab9
+      provider_name: QnA with SQL Query
+      provider_type: workflow
+      tool_label: QnA with SQL Query
+      tool_name: text2SQL
+      tool_parameters:
+        question: ''
+  annotation_reply:
+    enabled: false
+  chat_prompt_config: {}
+  completion_prompt_config: {}
+  dataset_configs:
+    datasets:
+      datasets: []
+    reranking_enable: false
+    retrieval_model: multiple
+    top_k: 4
+  dataset_query_variable: ''
+  external_data_tools: []
+  file_upload:
+    allowed_file_extensions:
+    - .JPG
+    - .JPEG
+    - .PNG
+    - .GIF
+    - .WEBP
+    - .SVG
+    - .MP4
+    - .MOV
+    - .MPEG
+    - .MPGA
+    allowed_file_types:
+    - image
+    allowed_file_upload_methods:
+    - local_file
+    - remote_url
+    enabled: true
+    image:
+      detail: high
+      enabled: true
+      number_limits: 3
+      transfer_methods:
+      - local_file
+      - remote_url
+    number_limits: 3
+  model:
+    completion_params:
+      stop: []
+    mode: chat
+    name: gpt-4o
+    provider: langgenius/azure_openai/azure_openai
+  more_like_this:
+    enabled: false
+  opening_statement: Hello! I'm your Construction Materials Assistant, here to help
+    you with any questions or information you need about construction materials. Whether
+    you're looking for prices, availability, or specifications, I can assist by finding
+    accurate answers using our database. Feel free to ask your questions—I'm professional,
+    approachable, and ready to support your construction needs!
+  pre_prompt: "```xml\n<instruction>\nYou are a Construction Materials Assistant.\
+    \ Your task is to answer questions by finding the relevant information using tools\
+    \ to call the text2SQL system. Follow these steps to complete the task:\n\n1.\
+    \ Carefully read the question provided in the input.\n2. Identify the key information\
+    \ or query intent from the question.\n3. Use the identified intent to construct\
+    \ a query that can be processed by the text2SQL system.\n4. Ensure the query is\
+    \ accurate and retrieves the necessary information to answer the question.\n5.\
+    \ Return the answer derived from the text2SQL system in a clear and concise manner.\n\
+    6. Do not include any XML tags in your output.\n\n<example>\nQuestion: \"What\
+    \ is the price of cement per bag?\"\nKey Intent: Retrieve the price of cement\
+    \ per bag from the database.\nGenerated Query: SELECT price_per_bag FROM materials\
+    \ WHERE material_name = 'cement';\nAnswer: \"The price of cement per bag is $10.\"\
+    \n</example>\n\n<example>\nQuestion: \"How many bricks are available in stock?\"\
+    \nKey Intent: Retrieve the quantity of bricks in stock from the database.\nGenerated\
+    \ Query: SELECT stock_quantity FROM materials WHERE material_name = 'bricks';\n\
+    Answer: \"There are 500 bricks available in stock.\"\n</example>\n\nEnsure that\
+    \ your output is clear, concise, and directly answers the question based on the\
+    \ retrieved information.\n</instruction>\n\n<input>\n{\n  \"question\": \"{{user_question}}\"\
+    \n}\n</input>\n\n<output>\n{\n  \"answer\": \"{{retrieved_answer}}\"\n}\n</output>\n\
+    ```"
+  prompt_type: simple
+  retriever_resource:
+    enabled: true
+  sensitive_word_avoidance:
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:
+    enabled: false
+  suggested_questions: []
+  suggested_questions_after_answer:
+    enabled: false
+  text_to_speech:
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form:
+  - text-input:
+      default: ''
+      label: user_question
+      required: false
+      variable: user_question
+  - text-input:
+      default: ''
+      label: retrieved_answer
+      required: false
+      variable: retrieved_answer
+version: 0.1.5

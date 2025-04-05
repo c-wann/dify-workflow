@@ -1,0 +1,880 @@
+app:
+  description: Ask Question by SQL Query
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: QnA with SQL Query
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: 1739456892224-source-1739450578882-target
+      selected: false
+      source: '1739456892224'
+      sourceHandle: source
+      target: '1739450578882'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1739448903778-source-1739459177928-target
+      selected: false
+      source: '1739448903778'
+      sourceHandle: source
+      target: '1739459177928'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1739459177928-source-1739463701447-target
+      selected: false
+      source: '1739459177928'
+      sourceHandle: source
+      target: '1739463701447'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1739463701447-source-1739449944209-target
+      selected: false
+      source: '1739463701447'
+      sourceHandle: source
+      target: '1739449944209'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1739518682091-source-17395189495240-target
+      source: '1739518682091'
+      sourceHandle: source
+      target: '17395189495240'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 17395189495240-source-1739456892224-target
+      source: '17395189495240'
+      sourceHandle: source
+      target: '1739456892224'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1739449944209-source-1739518505773-target
+      source: '1739449944209'
+      sourceHandle: source
+      target: '1739518505773'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1739518505773-true-1739518682091-target
+      source: '1739518505773'
+      sourceHandle: 'true'
+      target: '1739518682091'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1739518505773-false-1739456892224-target
+      source: '1739518505773'
+      sourceHandle: 'false'
+      target: '1739456892224'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: Question
+          max_length: 1024
+          options: []
+          required: true
+          type: paragraph
+          variable: question
+        - label: DB Conn
+          max_length: 1024
+          options: []
+          required: true
+          type: paragraph
+          variable: db_json
+        - label: Table Name
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: table_name
+      height: 142
+      id: '1739448903778'
+      position:
+        x: 2917.4758639244137
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 2917.4758639244137
+        y: 259.0811603814074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import pymysql  # Import library for MySQL database interaction\nimport\
+          \ json    # Import library for JSON data processing\n\ndef main(json_data,\
+          \ sql_command):\n    \"\"\"\n    Connect to MySQL database and execute the\
+          \ given SQL command.\n\n    Parameters:\n    json_data (str): JSON string\
+          \ containing database connection information.\n    sql_command (str): SQL\
+          \ query command to execute.\n\n    Returns:\n    dict: Dictionary containing\
+          \ query results or error message.\n    \"\"\"\n    try:\n        # Parse\
+          \ JSON string into Python dictionary\n        config = json.loads(json_data)['database']\n\
+          \        \n        # Establish database connection using configuration info\n\
+          \        connection = pymysql.connect(\n            host=config['host'],\
+          \        # Database server hostname or IP address\n            port=config['port'],\
+          \        # Database connection port number\n            user=config['user'],\
+          \        # Database username\n            password=config['password'], #\
+          \ Database password\n            database=config['database_name'] # Name\
+          \ of database to connect to\n        )\n        \n        try:\n       \
+          \     with connection.cursor() as cursor:  # Get database cursor using context\
+          \ manager\n                # Execute SQL command\n                cursor.execute(sql_command)\n\
+          \                \n                # Get all query results\n           \
+          \     result = cursor.fetchall()\n                \n                # Convert\
+          \ results to JSON string format\n                #result_str = json.dumps(result,\
+          \ ensure_ascii=False)\n                \n                # Return dictionary\
+          \ containing query results\n                return {\n                 \
+          \   \"result\": str(result)\n                }\n        \n        finally:\n\
+          \            # Ensure database connection is closed to free resources\n\
+          \            connection.close()\n    \n    except Exception as e:\n    \
+          \    # Catch and return any exception information\n        return {\n  \
+          \          \"result\": f\"Error: {str(e)}\"\n        }"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 3
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: Run Query
+        type: code
+        variables:
+        - value_selector:
+          - '1739448903778'
+          - db_json
+          variable: json_data
+        - value_selector:
+          - '1739463701447'
+          - text
+          variable: sql_command
+      height: 54
+      id: '1739449944209'
+      position:
+        x: 3906.7201445713426
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 3906.7201445713426
+        y: 259.0811603814074
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1739456892224'
+          - text
+          variable: result
+        selected: false
+        title: End
+        type: end
+      height: 90
+      id: '1739450578882'
+      position:
+        x: 5671.387511444495
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 5671.387511444495
+        y: 259.0811603814074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: azure_openai
+        prompt_template:
+        - id: dd7c2b33-264a-4809-838e-06c09aa8504c
+          role: system
+          text: '```xml
+
+            <instructions>
+
+            You are tasked with answering a question based on the provided SQL query
+            result and the question itself. Follow these steps to complete the task:
+
+
+            1. Carefully review the SQL query result provided. Understand the structure
+            of the data, including column names and their corresponding values.
+
+            2. Read and understand the question that is being asked. Identify the
+            specific information or insight the question is seeking from the SQL query
+            result.
+
+            3. Cross-reference the SQL query result with the question to extract the
+            relevant information. Ensure that your answer is accurate and directly
+            addresses the question.
+
+            4. If the question requires calculations, aggregations, or logical reasoning
+            based on the SQL query result, perform the necessary steps to derive the
+            correct answer.
+
+            5. Provide a concise and clear answer to the question. Avoid including
+            unnecessary details or information that is not relevant to the question.
+
+            6. Ensure that the output is in plain text and does not contain any XML
+            tags or formatting. The response should be easy to read and understand.
+            If the output needs to be displayed in a table format, use MD format for
+            the table output.
+
+            7. Ask a follow-up question if the query does not contain enough information
+            for you to answer the question.
+
+
+            Remember, your goal is to provide an accurate and contextually relevant
+            answer based solely on the SQL query result and the question provided.
+
+
+            </instructions>
+
+
+            <examples>
+
+            <example>
+
+            <question>
+
+            What is the total sales amount for the month of January?
+
+            </question>
+
+            <sql_query_result>
+
+            | Month   | Sales_Amount |
+
+            |---------|--------------|
+
+            | January | 5000         |
+
+            | February| 7000         |
+
+            </sql_query_result>
+
+            <answer>
+
+            The total sales amount for the month of January is 5000.
+
+            </answer>
+
+            </example>
+
+
+            <example>
+
+            <question>
+
+            How many employees are in the IT department?
+
+            </question>
+
+            <sql_query_result>
+
+            | Department | Employee_Count |
+
+            |------------|----------------|
+
+            | IT         | 15             |
+
+            | HR         | 10             |
+
+            </sql_query_result>
+
+            <answer>
+
+            There are 15 employees in the IT department.
+
+            </answer>
+
+            </example>
+
+
+            <example>
+
+            <question>
+
+            What is the average score of students in the Math subject?
+
+            </question>
+
+            <sql_query_result>
+
+            | Subject | Average_Score |
+
+            |---------|---------------|
+
+            | Math    | 85            |
+
+            | Science | 90            |
+
+            </sql_query_result>
+
+            <answer>
+
+            The average score of students in the Math subject is 85.
+
+            </answer>
+
+            </example>
+
+            </examples>
+
+
+            Here is the question and query result:
+
+            <question>
+
+            {{#1739448903778.question#}}
+
+            </question>
+
+            <sql_query_result>
+
+            {{#1739449944209.result#}}
+
+            </sql_query_result>
+
+
+            ```'
+        selected: false
+        title: QnA LLM
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739456892224'
+      position:
+        x: 5321.5129749722455
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 5321.5129749722455
+        y: 259.0811603814074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params: {}
+          mode: completion
+          name: pxlksr/defog_sqlcoder-7b-2:F16
+          provider: ollama
+        prompt_template:
+          edition_type: basic
+          text: "### Task\nGenerate a SQL query to answer [QUESTION]{{#1739448903778.question#}}[/QUESTION]\n\
+            \n### Database Schema\nThe query will run on a MySQL database with the\
+            \ following schema:\nCREATE TABLE `shipment` (\n  `Sales_Document` int\
+            \ DEFAULT NULL,\n  `Delivery` bigint DEFAULT NULL,\n  `Customer_Name`\
+            \ text COLLATE utf8mb3_unicode_ci,\n  `Site_Name` text COLLATE utf8mb3_unicode_ci,\n\
+            \  `Delivery_block` text COLLATE utf8mb3_unicode_ci,\n  `Status` int DEFAULT\
+            \ NULL,\n  `Truck` text COLLATE utf8mb3_unicode_ci,\n  `Material_Description`\
+            \ text COLLATE utf8mb3_unicode_ci,\n  `Shipping PointReceiving_Pt` text\
+            \ COLLATE utf8mb3_unicode_ci,\n  `Delivery_quantity` double DEFAULT NULL,\n\
+            \  `Date_arrive_Plant` text COLLATE utf8mb3_unicode_ci,\n  `Time_arrive_Plant`\
+            \ text COLLATE utf8mb3_unicode_ci,\n  `Date_of_Loading` text COLLATE utf8mb3_unicode_ci,\n\
+            \  `Start_time_of loading` text COLLATE utf8mb3_unicode_ci,\n  `Date_leave_plant`\
+            \ text COLLATE utf8mb3_unicode_ci,\n  `Time_leave_plant` text COLLATE\
+            \ utf8mb3_unicode_ci,\n  `Date_arrive_site` text COLLATE utf8mb3_unicode_ci,\n\
+            \  `Time_arrive_site` text COLLATE utf8mb3_unicode_ci,\n  `Travelling_Time`\
+            \ int DEFAULT NULL,\n  `Date_start_unloading` text COLLATE utf8mb3_unicode_ci,\n\
+            \  `Time_start_unloading` text COLLATE utf8mb3_unicode_ci,\n  `Date_leave_site`\
+            \ text COLLATE utf8mb3_unicode_ci,\n  `Time_leave_site` text COLLATE utf8mb3_unicode_ci,\n\
+            \  `Wating_Time` int DEFAULT NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3\
+            \ COLLATE=utf8mb3_unicode_ci;\n\n### Instructions\nAs an AI chatbot specialized\
+            \ in SQL queries for MySQL databases, your task is to generate a syntactically\
+            \ correct MySQL query to retrieve information from the provided database\
+            \ schema. Follow these guidelines:\n- Utilize your expertise in MySQL\
+            \ to craft efficient queries that return relevant data.\n- Use the schema\
+            \ provided to identify the appropriate tables and columns for your query.\n\
+            - If the question involves conditions such as \"today\" or \"current\"\
+            , utilize the GETDATE() function to retrieve the current date and time.\n\
+            - Employ joins between tables if necessary to gather relevant information.\n\
+            - Query for at most [top_k] results using the OFFSET FETCH clause for\
+            \ performance optimization. You can specify the desired value for [top_k]\
+            \ when calling the function.\n- Select only the columns necessary to answer\
+            \ the question. Enclose each column name in square brackets ([]) to denote\
+            \ them as delimited identifiers.\n- Avoid querying for all columns from\
+            \ a table to enhance efficiency.\n- If the question cannot be answered\
+            \ with the available database schema, return 'I do not know'.\n- ***When\
+            \ ordering results, handle NULL values appropriately and DO NOT using\
+            \ the 'NULLS LAST' syntax.***\n\n**Missing Schema Handling:**\nIf the\
+            \ database schema information is missing, please provide it for query\
+            \ generation. Otherwise, this process will return 'Missing database schema'.\n\
+            \n### Answer\nGiven the database schema, here is the SQL query that [QUESTION]{{#1739448903778.question#}}[/QUESTION]\n\
+            [SQL]"
+        selected: false
+        title: defog_sqlcoder-7b-2
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739459177928'
+      position:
+        x: 3250.892378839337
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 3250.892378839337
+        y: 259.0811603814074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: azure_openai
+        prompt_template:
+        - id: 23e2abf7-b035-4e25-a929-990894ecf7e3
+          role: system
+          text: "```xml\n<instructions>\nYour task is to translate the given SQL query\
+            \ into a format that can be executed in MySQL. Follow these steps to ensure\
+            \ accurate and consistent results:\n\n1. Analyze the input SQL query to\
+            \ understand its structure, syntax, and intent.\n2. Identify any elements\
+            \ in the query incompatible with MySQL syntax, such as functions, keywords,\
+            \ or specific features from other SQL dialects.\n3. Modify the query to\
+            \ conform to MySQL's syntax and conventions. This may include:\n   - Replacing\
+            \ incompatible functions with MySQL equivalents.\n   - Adjusting data\
+            \ types, if necessary.\n   - Ensuring proper use of MySQL-specific keywords\
+            \ and clauses.\n4. Verify that the translated query adheres to MySQL's\
+            \ syntax rules and will execute correctly in a MySQL environment.\n5.\
+            \ Output only the translated MySQL query. Do not include any explanations,\
+            \ comments, or additional text in the output.\n6. Ensure the output does\
+            \ not contain any XML tags or formatting.\n\n</instructions>\n\n<examples>\n\
+            <example>\n<original_query>\nSELECT TOP 10 * FROM employees;\n</original_query>\n\
+            <mysql_query>\nSELECT * FROM employees LIMIT 10;\n</mysql_query>\n</example>\n\
+            \n<example>\n<original_query>\nSELECT employee_id || ' - ' || employee_name\
+            \ AS full_name FROM employees;\n</original_query>\n<mysql_query>\nSELECT\
+            \ CONCAT(employee_id, ' - ', employee_name) AS full_name FROM employees;\n\
+            </mysql_query>\n</example>\n\n<example>\n<original_query>\nCREATE TABLE\
+            \ test_table (id SERIAL PRIMARY KEY, name VARCHAR(100));\n</original_query>\n\
+            <mysql_query>\nCREATE TABLE test_table (id INT AUTO_INCREMENT PRIMARY\
+            \ KEY, name VARCHAR(100));\n</mysql_query>\n</example>\n</examples>\n\n\
+            ***You MUST follow the same table name: {{#1739448903778.table_name#}}\n\
+            query:{{#1739459177928.text#}}\n```"
+        selected: false
+        title: Translate SQL query for MySQL
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739463701447'
+      position:
+        x: 3575.476818430687
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 3575.476818430687
+        y: 259.0811603814074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: 4da8919c-815d-45b7-80a1-f4bcc34d368c
+            value: error
+            varType: string
+            variable_selector:
+            - '1739449944209'
+            - result
+          - comparison_operator: contains
+            id: 21f1346a-d372-48e6-8db7-8f63882687a1
+            value: Error
+            varType: string
+            variable_selector:
+            - '1739449944209'
+            - result
+          id: 'true'
+          logical_operator: or
+        desc: ''
+        selected: false
+        title: IF/ELSE
+        type: if-else
+      height: 152
+      id: '1739518505773'
+      position:
+        x: 4203.301532215383
+        y: 259.0811603814074
+      positionAbsolute:
+        x: 4203.301532215383
+        y: 259.0811603814074
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o
+          provider: azure_openai
+        prompt_template:
+        - id: db98d08d-bedc-47a7-8137-ca157683e284
+          role: system
+          text: '```xml
+
+            <instructions>
+
+            You are tasked with fine-tuning an SQL query based on an error message
+            provided. Follow these steps to complete the task:
+
+
+            1. Carefully analyze the error message to understand the issue. Identify
+            the specific part of the SQL query that is causing the error. Common issues
+            may include syntax errors, missing or incorrect keywords, invalid column
+            names, or mismatched data types.
+
+
+            2. Review the SQL query provided alongside the error message. Ensure you
+            understand the query''s intent and the expected outcome.
+
+
+            3. Cross-reference the error message with the SQL query to pinpoint the
+            exact problem. Use your knowledge of SQL syntax, functions, and best practices
+            to identify potential fixes.
+
+
+            4. Rewrite or adjust the SQL query to resolve the issue highlighted by
+            the error message. Ensure that the updated query adheres to SQL standards
+            and achieves the intended functionality.
+
+
+            5. Test the revised query in your mind or through logical reasoning to
+            ensure it resolves the error and produces the desired result.
+
+
+            6. Provide the corrected SQL query as the output. Ensure the output is
+            clean, concise, and free of any unnecessary comments or explanations.
+
+
+            7. Do not include any XML tags in the output. The output should only contain
+            the corrected SQL query.
+
+
+            </instructions>
+
+
+            <examples>
+
+            <example>
+
+            <error_message>
+
+            Syntax error near ''FROM'' at line 2.
+
+            </error_message>
+
+            <sql_query>
+
+            SELECT name age
+
+            FROM users;
+
+            </sql_query>
+
+            <corrected_query>
+
+            SELECT name, age
+
+            FROM users;
+
+            </corrected_query>
+
+            </example>
+
+
+            <example>
+
+            <error_message>
+
+            Column ''user_id'' does not exist in table ''orders''.
+
+            </error_message>
+
+            <sql_query>
+
+            SELECT user_id, order_date
+
+            FROM orders;
+
+            </sql_query>
+
+            <corrected_query>
+
+            SELECT customer_id, order_date
+
+            FROM orders;
+
+            </corrected_query>
+
+            </example>
+
+
+            <example>
+
+            <error_message>
+
+            Data type mismatch in WHERE clause: expected integer but found string.
+
+            </error_message>
+
+            <sql_query>
+
+            SELECT *
+
+            FROM products
+
+            WHERE product_id = ''123'';
+
+            </sql_query>
+
+            <corrected_query>
+
+            SELECT *
+
+            FROM products
+
+            WHERE product_id = 123;
+
+            </corrected_query>
+
+            </example>
+
+            </examples>
+
+
+
+            <error_message>
+
+            {{#1739449944209.result#}}
+
+            </error_message>
+
+            <sql_query>
+
+            {{#1739463701447.text#}}
+
+            </sql_query>
+
+
+            ```'
+        selected: false
+        title: Correct SQL Query
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1739518682091'
+      position:
+        x: 4594.723616432342
+        y: 172.73587528741137
+      positionAbsolute:
+        x: 4594.723616432342
+        y: 172.73587528741137
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import pymysql  # Import library for MySQL database interaction\nimport\
+          \ json    # Import library for JSON data processing\n\ndef main(json_data,\
+          \ sql_command):\n    \"\"\"\n    Connect to MySQL database and execute the\
+          \ given SQL command.\n\n    Parameters:\n    json_data (str): JSON string\
+          \ containing database connection information.\n    sql_command (str): SQL\
+          \ query command to execute.\n\n    Returns:\n    dict: Dictionary containing\
+          \ query results or error message.\n    \"\"\"\n    try:\n        # Parse\
+          \ JSON string into Python dictionary\n        config = json.loads(json_data)['database']\n\
+          \        \n        # Establish database connection using configuration info\n\
+          \        connection = pymysql.connect(\n            host=config['host'],\
+          \        # Database server hostname or IP address\n            port=config['port'],\
+          \        # Database connection port number\n            user=config['user'],\
+          \        # Database username\n            password=config['password'], #\
+          \ Database password\n            database=config['database_name'] # Name\
+          \ of database to connect to\n        )\n        \n        try:\n       \
+          \     with connection.cursor() as cursor:  # Get database cursor using context\
+          \ manager\n                # Execute SQL command\n                cursor.execute(sql_command)\n\
+          \                \n                # Get all query results\n           \
+          \     result = cursor.fetchall()\n                \n                # Convert\
+          \ results to JSON string format\n                #result_str = json.dumps(result,\
+          \ ensure_ascii=False)\n                \n                # Return dictionary\
+          \ containing query results\n                return {\n                 \
+          \   \"result\": str(result)\n                }\n        \n        finally:\n\
+          \            # Ensure database connection is closed to free resources\n\
+          \            connection.close()\n    \n    except Exception as e:\n    \
+          \    # Catch and return any exception information\n        return {\n  \
+          \          \"result\": f\"Error: {str(e)}\"\n        }"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        retry_config:
+          max_retries: 3
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: Retry Query
+        type: code
+        variables:
+        - value_selector:
+          - '1739448903778'
+          - db_json
+          variable: json_data
+        - value_selector:
+          - '1739463701447'
+          - text
+          variable: sql_command
+      height: 54
+      id: '17395189495240'
+      position:
+        x: 4965.809644640865
+        y: 172.73587528741137
+      positionAbsolute:
+        x: 4965.809644640865
+        y: 172.73587528741137
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -1290.0276016710936
+      y: 328.51181592243455
+      zoom: 0.4759549008752686
